@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Screening Standards Clarity — Sentinel Bio</title>
+<link href="https://api.fontshare.com/v2/css?f[]=bespoke-serif@400,500,600,700&f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet">
+<style>
+  /*
+   * Fonts:
+   * - Bespoke Serif (Fontshare) for headings
+   * - General Sans (Fontshare) as stand-in for Denim; swap in Denim
+   *   when deploying to sentinelbio.org if you have the webfont files:
+   *   font-family: 'Denim', 'General Sans', sans-serif;
+   */
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'General Sans', sans-serif;
+    background: #FAFAF6;
+    color: #1C1C1C;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 48px 24px;
+  }
+
+  .container {
+    max-width: 820px;
+    width: 100%;
+  }
+
+  h1 {
+    font-family: 'Bespoke Serif', serif;
+    font-size: 1.65rem;
+    font-weight: 600;
+    color: #1C1C1C;
+    margin-bottom: 4px;
+    line-height: 1.25;
+  }
+
+  .subtitle {
+    font-size: 0.78rem;
+    color: #1A7A3D;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 36px;
+  }
+
+  /* === Spectrum bar === */
+  .spectrum-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 12px;
+  }
+
+  .spectrum-bar {
+    position: relative;
+    height: 76px;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.15);
+  }
+
+  .zone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    transition: flex 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                background 0.5s ease;
+    overflow: hidden;
+    position: relative;
+    padding: 0 10px;
+    min-width: 0;
+  }
+
+  .zone-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    white-space: nowrap;
+    transition: opacity 0.25s ease;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.12);
+  }
+
+  .zone-sub {
+    font-size: 0.56rem;
+    font-weight: 400;
+    white-space: nowrap;
+    opacity: 0.9;
+    margin-top: 3px;
+    transition: opacity 0.25s ease;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.08);
+  }
+
+  /* Zone divider lines */
+  .zone + .zone {
+    border-left: 1px solid rgba(255,255,255,0.2);
+  }
+
+  /* === Business risk bracket === */
+  .risk-bracket {
+    position: relative;
+    width: 100%;
+    height: 34px;
+    margin-bottom: 10px;
+  }
+
+  .risk-bracket-inner {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                width 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.35s ease;
+  }
+
+  .risk-label {
+    font-size: 0.64rem;
+    font-weight: 700;
+    margin-top: 2px;
+    white-space: nowrap;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color 0.5s ease;
+  }
+
+  .risk-bracket-line {
+    width: 100%;
+    height: 1.5px;
+    position: relative;
+    margin-top: 4px;
+    transition: background 0.5s ease;
+  }
+
+  .risk-bracket-line::before,
+  .risk-bracket-line::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    width: 1.5px;
+    height: 11px;
+    transition: background 0.5s ease;
+  }
+
+  .risk-bracket-line::before { left: 0; }
+  .risk-bracket-line::after { right: 0; }
+
+  /* === Category labels below bar === */
+  .category-labels {
+    display: flex;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 36px;
+    min-height: 44px;
+  }
+
+  .cat-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    transition: flex 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    min-width: 0;
+  }
+
+  .cat-label-text {
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: #3A3A3A;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .cat-label-sub {
+    font-size: 0.56rem;
+    color: #888;
+    text-align: center;
+    margin-top: 2px;
+    white-space: nowrap;
+  }
+
+  /* === Slider === */
+  .slider-section {
+    margin-top: 8px;
+    padding: 24px 0;
+    border-top: 1.5px solid #E8E8E4;
+  }
+
+  .slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 16px;
+  }
+
+  .slider-title {
+    font-family: 'Bespoke Serif', serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #1C1C1C;
+  }
+
+  .slider-value {
+    font-size: 0.9rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.4s ease;
+  }
+
+  .slider-track {
+    position: relative;
+    width: 100%;
+    height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+    transition: background 0.4s ease;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #FAFAF6;
+    border: 3px solid #1C1C1C;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    transition: box-shadow 0.15s ease, border-color 0.4s ease;
+  }
+
+  input[type="range"]::-webkit-slider-thumb:hover {
+    box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #FAFAF6;
+    border: 3px solid #1C1C1C;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+
+  .slider-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4px;
+  }
+
+  .slider-endpoint {
+    font-size: 0.62rem;
+    color: #999;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  /* === Dynamic annotation === */
+  .annotation {
+    margin-top: 24px;
+    padding: 18px 22px;
+    border-radius: 0 8px 8px 0;
+    min-height: 56px;
+    transition: background 0.5s ease, border-color 0.5s ease;
+    border-left: 3.5px solid;
+  }
+
+  .annotation-text {
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: #2A2A2A;
+  }
+
+  .annotation-text strong {
+    font-weight: 700;
+  }
+
+  /* === Footer === */
+  .footer {
+    margin-top: 32px;
+    padding-top: 18px;
+    border-top: 1.5px solid #E8E8E4;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .footer-logo {
+    font-family: 'Bespoke Serif', serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #1C1C1C;
+  }
+
+  .footer-tagline {
+    font-size: 0.62rem;
+    color: #999;
+  }
+
+  .footer-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #1A7A3D;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="subtitle">Nucleic Acid Governance</div>
+  <h1>How Screening Standards Reduce Business Risk</h1>
+
+  <!-- Risk bracket above bar -->
+  <div class="risk-bracket" style="margin-top: 36px;">
+    <div class="risk-bracket-inner" id="riskBracket">
+      <div class="risk-label" id="riskLabel">ZONE OF BUSINESS RISK</div>
+      <div class="risk-bracket-line" id="riskLine"></div>
+    </div>
+  </div>
+
+  <!-- Spectrum bar -->
+  <div class="spectrum-wrapper">
+    <div class="spectrum-bar" id="spectrumBar">
+      <div class="zone" id="zoneLow">
+        <span class="zone-label" id="labelLow">Low Risk</span>
+        <span class="zone-sub" id="subLow">e.g. cloning vectors</span>
+      </div>
+      <div class="zone" id="zoneLowMid">
+        <span class="zone-label" id="labelLowMid">Agreed Low</span>
+        <span class="zone-sub" id="subLowMid">Consensus safe</span>
+      </div>
+      <div class="zone" id="zoneAmbiguous">
+        <span class="zone-label" id="labelAmbiguous">Ambiguous</span>
+        <span class="zone-sub" id="subAmbiguous">No standard definitions</span>
+      </div>
+      <div class="zone" id="zoneHighMid">
+        <span class="zone-label" id="labelHighMid">Agreed High</span>
+        <span class="zone-sub" id="subHighMid">Consensus dangerous</span>
+      </div>
+      <div class="zone" id="zoneHigh">
+        <span class="zone-label" id="labelHigh">High Risk</span>
+        <span class="zone-sub" id="subHigh">e.g. pandemic viruses</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category labels below -->
+  <div class="category-labels">
+    <div class="cat-label" id="catLow">
+      <span class="cat-label-text">Obviously safe</span>
+      <span class="cat-label-sub">Ship immediately</span>
+    </div>
+    <div class="cat-label" id="catMid">
+      <span class="cat-label-text" id="catMidText">Uncertain — who decides?</span>
+      <span class="cat-label-sub" id="catMidSub">Companies bear liability alone</span>
+    </div>
+    <div class="cat-label" id="catHigh">
+      <span class="cat-label-text">Obviously reject</span>
+      <span class="cat-label-sub">Flag to authorities</span>
+    </div>
+  </div>
+
+  <!-- Slider -->
+  <div class="slider-section">
+    <div class="slider-header">
+      <span class="slider-title">Clarity of screening standards</span>
+      <span class="slider-value" id="sliderValue">0%</span>
+    </div>
+    <div class="slider-track">
+      <input type="range" id="claritySlider" min="0" max="100" value="0" />
+    </div>
+    <div class="slider-labels">
+      <span class="slider-endpoint">No standards</span>
+      <span class="slider-endpoint">Full consensus definitions</span>
+    </div>
+  </div>
+
+  <!-- Dynamic annotation -->
+  <div class="annotation" id="annotation">
+    <div class="annotation-text" id="annotationText"></div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <span class="footer-logo">Sentinel Bio</span>
+    <span class="footer-dot"></span>
+    <span class="footer-tagline">Making pandemics history, within our lifetimes</span>
+  </div>
+</div>
+
+<script>
+// ─── Elements ──────────────────────────────────────────
+const slider        = document.getElementById('claritySlider');
+const sliderValueEl = document.getElementById('sliderValue');
+
+const zoneLow      = document.getElementById('zoneLow');
+const zoneLowMid   = document.getElementById('zoneLowMid');
+const zoneAmbiguous= document.getElementById('zoneAmbiguous');
+const zoneHighMid  = document.getElementById('zoneHighMid');
+const zoneHigh     = document.getElementById('zoneHigh');
+
+const labelLow     = document.getElementById('labelLow');
+const subLow       = document.getElementById('subLow');
+const labelLowMid  = document.getElementById('labelLowMid');
+const subLowMid    = document.getElementById('subLowMid');
+const labelAmbiguous = document.getElementById('labelAmbiguous');
+const subAmbiguous = document.getElementById('subAmbiguous');
+const labelHighMid = document.getElementById('labelHighMid');
+const subHighMid   = document.getElementById('subHighMid');
+const labelHigh    = document.getElementById('labelHigh');
+const subHigh      = document.getElementById('subHigh');
+
+const riskBracket  = document.getElementById('riskBracket');
+const riskLabel    = document.getElementById('riskLabel');
+const riskLine     = document.getElementById('riskLine');
+const annotationEl = document.getElementById('annotation');
+const annotationText = document.getElementById('annotationText');
+
+const catLow       = document.getElementById('catLow');
+const catMid       = document.getElementById('catMid');
+const catHigh      = document.getElementById('catHigh');
+const catMidText   = document.getElementById('catMidText');
+const catMidSub    = document.getElementById('catMidSub');
+
+// ─── Color utilities ───────────────────────────────────
+function lerp(a, b, t) { return a + (b - a) * t; }
+
+function lerpColor(c1, c2, t) {
+  return [
+    Math.round(lerp(c1[0], c2[0], t)),
+    Math.round(lerp(c1[1], c2[1], t)),
+    Math.round(lerp(c1[2], c2[2], t))
+  ];
+}
+
+function rgb(c) { return `rgb(${c[0]},${c[1]},${c[2]})`; }
+function rgba(c, a) { return `rgba(${c[0]},${c[1]},${c[2]},${a})`; }
+
+// ─── Palette ───────────────────────────────────────────
+// Endpoints stay constant — they represent inherent sequence risk
+const LOW_GREEN     = [22, 135, 67];    // #168743 — rich emerald
+const LOW_GREEN_LT  = [40, 167, 90];    // lighter green for "agreed low"
+const HIGH_RED      = [195, 55, 48];    // #C33730 — clear red
+const HIGH_RED_LT   = [210, 90, 70];    // lighter red for "agreed high"
+
+// Ambiguous zone: transitions from warm orange → cool blue as clarity ↑
+const AMB_ORANGE    = [232, 156, 52];   // #E89C34 — warm amber
+const AMB_BLUE      = [82, 140, 190];   // #528CBE — cool steel blue
+
+// Bracket accent follows same transition
+const BRACKET_WARM  = [210, 130, 40];
+const BRACKET_COOL  = [82, 140, 190];
+
+// Annotation backgrounds
+const ANNOT_BG_WARM = [255, 245, 230];  // warm cream
+const ANNOT_BG_COOL = [232, 242, 250];  // cool ice
+
+// Text on zones
+const TEXT_LIGHT    = [255, 255, 255];
+const TEXT_ON_AMB_0 = [80, 40, 5];      // dark on orange
+const TEXT_ON_AMB_1 = [20, 50, 80];     // dark on blue
+
+// ─── Update function ──────────────────────────────────
+function update(val) {
+  const t = val / 100;
+  sliderValueEl.textContent = val + '%';
+
+  // ── Zone flex widths ──
+  const fLow     = lerp(1.2, 1.8, t);
+  const fLowMid  = lerp(0.01, 2.2, t);  // start tiny, not zero (avoids border flash)
+  const fAmb     = lerp(7.56, 2.0, t);
+  const fHighMid = lerp(0.01, 2.2, t);
+  const fHigh    = lerp(1.2, 1.8, t);
+
+  zoneLow.style.flex     = fLow;
+  zoneLowMid.style.flex  = fLowMid;
+  zoneAmbiguous.style.flex = fAmb;
+  zoneHighMid.style.flex = fHighMid;
+  zoneHigh.style.flex    = fHigh;
+
+  // ── Zone colors ──
+  // Endpoints: fixed
+  zoneLow.style.background  = rgb(LOW_GREEN);
+  zoneLow.style.color       = rgb(TEXT_LIGHT);
+  zoneHigh.style.background = rgb(HIGH_RED);
+  zoneHigh.style.color      = rgb(TEXT_LIGHT);
+
+  // Agreed Low: blend from orange-ish toward green as it grows
+  const agreedLowCol = lerpColor([180, 150, 60], LOW_GREEN_LT, t);
+  zoneLowMid.style.background = rgb(agreedLowCol);
+  zoneLowMid.style.color = rgb(TEXT_LIGHT);
+
+  // Agreed High: blend from orange-ish toward red as it grows
+  const agreedHighCol = lerpColor([200, 130, 60], HIGH_RED_LT, t);
+  zoneHighMid.style.background = rgb(agreedHighCol);
+  zoneHighMid.style.color = rgb(TEXT_LIGHT);
+
+  // Ambiguous center: orange → blue
+  const ambCol  = lerpColor(AMB_ORANGE, AMB_BLUE, t);
+  const ambText = lerpColor(TEXT_ON_AMB_0, TEXT_ON_AMB_1, t);
+  zoneAmbiguous.style.background = rgb(ambCol);
+  zoneAmbiguous.style.color = rgb(ambText);
+
+  // ── Text visibility based on zone width ──
+  const totalFlex = fLow + fLowMid + fAmb + fHighMid + fHigh;
+  const pxTotal = 820; // approx container width
+
+  function setVisibility(label, sub, flex) {
+    const w = (flex / totalFlex) * pxTotal;
+    label.style.opacity = w > 55 ? 1 : 0;
+    sub.style.opacity   = w > 95 ? 1 : 0;
+  }
+
+  setVisibility(labelLow, subLow, fLow);
+  setVisibility(labelLowMid, subLowMid, fLowMid);
+  setVisibility(labelAmbiguous, subAmbiguous, fAmb);
+  setVisibility(labelHighMid, subHighMid, fHighMid);
+  setVisibility(labelHigh, subHigh, fHigh);
+
+  // ── Ambiguous zone label text ──
+  if (t < 0.3) {
+    labelAmbiguous.textContent = 'Ambiguous';
+    subAmbiguous.textContent   = 'No standard definitions';
+  } else if (t < 0.7) {
+    labelAmbiguous.textContent = 'Disputed';
+    subAmbiguous.textContent   = 'Poorly understood';
+  } else {
+    labelAmbiguous.textContent = 'Disputed';
+    subAmbiguous.textContent   = 'Agreed to disagree';
+  }
+
+  // ── Risk bracket ──
+  const leftPct  = ((fLow + fLowMid) / totalFlex) * 100;
+  const widthPct = (fAmb / totalFlex) * 100;
+
+  riskBracket.style.left  = leftPct + '%';
+  riskBracket.style.width = widthPct + '%';
+  riskBracket.style.opacity = Math.max(0.25, widthPct / 78);
+
+  const bracketCol = lerpColor(BRACKET_WARM, BRACKET_COOL, t);
+  const bracketCSS = rgb(bracketCol);
+  riskLabel.style.color     = bracketCSS;
+  riskLine.style.background = bracketCSS;
+  document.documentElement.style.setProperty('--bracket-color', bracketCSS);
+
+  if (t > 0.85) {
+    riskLabel.textContent = 'MINIMAL BUSINESS RISK';
+  } else if (t > 0.5) {
+    riskLabel.textContent = 'REDUCED BUSINESS RISK';
+  } else {
+    riskLabel.textContent = 'ZONE OF BUSINESS RISK';
+  }
+
+  // ── Category labels below ──
+  catLow.style.flex  = fLow + fLowMid;
+  catMid.style.flex   = fAmb;
+  catHigh.style.flex  = fHighMid + fHigh;
+
+  if (t < 0.2) {
+    catMidText.textContent = 'Uncertain — who decides?';
+    catMidSub.textContent  = 'Companies bear liability alone';
+  } else if (t < 0.5) {
+    catMidText.textContent = 'Emerging clarity';
+    catMidSub.textContent  = 'Some sequences newly categorized';
+  } else if (t < 0.8) {
+    catMidText.textContent = 'Known edge cases';
+    catMidSub.textContent  = 'Shared standards reduce ambiguity';
+  } else {
+    catMidText.textContent = 'Residual disputes only';
+    catMidSub.textContent  = 'Well-defined process for resolution';
+  }
+
+  // ── Annotation ──
+  const annotBg = lerpColor(ANNOT_BG_WARM, ANNOT_BG_COOL, t);
+  annotationEl.style.background      = rgb(annotBg);
+  annotationEl.style.borderLeftColor = bracketCSS;
+
+  if (t < 0.15) {
+    annotationText.innerHTML = '<strong>Today:</strong> Without standard definitions of sequences of concern, DNA synthesis companies face a wide zone of business risk. Cautious screening loses customers; permissive screening risks enabling misuse.';
+  } else if (t < 0.35) {
+    annotationText.innerHTML = '<strong>Early progress:</strong> Initial consensus is forming around the easiest sequences to classify. The ambiguous zone is beginning to shrink, but most edge cases remain unresolved.';
+  } else if (t < 0.55) {
+    annotationText.innerHTML = '<strong>Building momentum:</strong> Standard-setting bodies have categorized a growing number of sequences. Companies can confidently screen more orders, reducing their exposure to liability.';
+  } else if (t < 0.75) {
+    annotationText.innerHTML = '<strong>Maturing standards:</strong> The remaining disputed sequences are well-documented, and the community has agreed frameworks for handling them. Business risk is significantly reduced.';
+  } else if (t < 0.9) {
+    annotationText.innerHTML = '<strong>Near-complete clarity:</strong> The vast majority of sequences are categorized as either agreed-safe or agreed-dangerous. Only a small set of novel or dual-use sequences remain in dispute.';
+  } else {
+    annotationText.innerHTML = '<strong>Future state:</strong> Standard definitions developed by bodies like the SBRC give companies clear, defensible criteria for every order. The zone of business risk has been compressed to a narrow band of genuinely contested cases.';
+  }
+
+  // ── Slider styling ──
+  const sliderAccent = lerpColor(AMB_ORANGE, [40, 167, 90], t);
+  sliderValueEl.style.color = rgb(sliderAccent);
+  slider.style.background = `linear-gradient(to right, ${rgb(AMB_ORANGE)}, ${rgb(sliderAccent)})`;
+}
+
+slider.addEventListener('input', (e) => update(parseInt(e.target.value)));
+update(0);
+</script>
+
+<style>
+  .risk-bracket-line::before,
+  .risk-bracket-line::after {
+    background: var(--bracket-color, rgb(210,130,40)) !important;
+  }
+</style>
+
+</body>
+</html>
